@@ -4,24 +4,19 @@ using namespace std;
 
 class Solution {
 public:
-    double findMaxAverage(vector<int>& nums, int k) {
-        deque<int> dq;
-        double ans = 0;
-        double tmp = 0;
-        for(int i =0;i<k;i++)
-        {
-            tmp += double(nums[i]);
-            dq.push_back(nums[i]);
+    int numOfSubarrays(vector<int>& arr, int k, int threshold) {
+        double avg = 0;
+        for(int i = 0;i < k;++i){
+            avg += arr[i];
         }
-        ans = tmp / k;
-        for(int i = k;i<nums.size();i++)
-        {
-            tmp-=dq.front();
-            dq.pop_front();
-            dq.push_back(nums[i]);
-            tmp+=dq.back();
-            ans = tmp/k > ans ? tmp/k : ans;
+        double base_line = threshold * k;
+        int cnt = avg >= base_line ? 1: 0;
+
+        for(int i = k;i < arr.size() ;++i){
+            avg+=arr[i];
+            avg-=arr[i-k];
+            cnt = avg >= base_line ? cnt+1 : cnt;
         }
-        return ans;
+        return cnt;
     }
 };
